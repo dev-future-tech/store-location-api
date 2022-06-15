@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - property:
+      dbms: postgresql
+      name: now
+      value: current_timestamp
+  - property:
+      dbms: postgresql
+      name: uuid_function
+      value: uuid_generate_v4()
+  - changeSet:
+      id: 1
+      author: aikeda
+      changes:
+        - sqlFile:
+            dbms: postgresql
+            splitStatements: true
+            path: db/setup.sql
+            stripComments: true
+  - changeSet:
+      id: 2
+      author: aikeda
+      changes:
+        - createTable:
+            tableName: store_locations
+            columns:
+              - column:
+                  name: store_location_id
+                  type: UUID
+                  defaultValueComputed: ${uuid_function}
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: store_id
+                  type: UUID
+                  defaultValueComputed: ${uuid_function}
+              - column:
+                  name: latitude
+                  type: varchar(10)
+              - column:
+                  name: longitude
+                  type: varchar(10)
